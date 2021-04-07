@@ -1,7 +1,7 @@
 #!/bin/bash
 # https://raspberrypi.stackexchange.com/questions/100195
-interfaceWifi=wlan0
-interfaceWired=eth0
+interfaceWifi="wlan0"
+interfaceWired="eth0"
 timeout=2m
 timeoutDiscon=10
 networkdCLIENT="/etc/systemd/network/08-${interfaceWifi}-CLI.network" # Configuration file for client connection
@@ -71,7 +71,8 @@ case "$1" in
 esac	
 
 # Check if ethernet cable is plugged in. If so create hotspot and exit
-if [ "$(cat /sys/class/net/${interfaceWired}/carrier)" = "1" ]; then
+if [ "$interfaceWired" != "" ] && \
+    [ "$(cat /sys/class/net/${interfaceWired}/carrier)" = "1" ]; then
 	echo "There is a wired connection. Enable hotspot"
 	if wpa_cli -i$interfaceWifi status | grep -q "mode=station"; then
 		wpa_cli -i$interfaceWifi select_network 0
